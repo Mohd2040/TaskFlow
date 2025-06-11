@@ -13,7 +13,31 @@ This project was created to:
 - Demonstrate a **cloud-native architecture** suitable for modern teams.
 - Build a portfolio-ready project to showcase on **Upwork** and **LinkedIn**.
 
----
+----
+
+✅ Features
+🌐 RESTful API for managing tasks
+
+☁️ Uses cloud-hosted MongoDB
+
+🐳 Containerized with Docker
+
+⚙️ Deployable to Kubernetes
+
+🔁 Infrastructure as Code with Terraform
+
+🔄 CI/CD via GitHub Actions
+
+----
+
+📈 Future Improvements
+ Add JWT authentication
+
+ Multi-user task support
+
+ Frontend (React or Svelte)
+
+ Cloud Monitoring & Logging setup
 
 ## 🛠 Tech Stack
 
@@ -24,5 +48,11 @@ This project was created to:
 | **CI/CD**    | GitHub Actions           |
 | **Cloud**    | Terraform + AWS/GCP/Azure|
 | **Container**| Docker & Kubernetes      |
+
+----
+
+👨‍💻 Created by
+Mohamed from Gaza 🇵🇸
+📌 DevOps Engineer | Passionate about scalable cloud systems
 
 ---
