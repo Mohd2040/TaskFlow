@@ -25,18 +25,22 @@
   <main class="py-12 px-4 max-w-md mx-auto">
     <section>
       <h2 class="text-2xl font-bold text-indigo-600 mb-6 text-center">Create Your Account</h2>
-      <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
+      <!-- Alert Messages -->
+      <div id="alertBox" class="hidden p-4 mb-4 text-sm rounded-lg" role="alert"></div>
+
+      <form id="registerForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Full Name</label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring" id="name" type="text" placeholder="John Doe">
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring" id="name" type="text" placeholder="John Doe" required>
         </div>
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring" id="email" type="email" placeholder="you@example.com">
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring" id="email" type="email" placeholder="you@example.com" required>
         </div>
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-4 leading-tight focus:outline-none focus:ring" id="password" type="password" placeholder="********">
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-4 leading-tight focus:outline-none focus:ring" id="password" type="password" placeholder="********" required>
         </div>
         <div class="flex items-center justify-between">
           <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded" type="submit">
@@ -44,6 +48,7 @@
           </button>
         </div>
       </form>
+
       <div class="text-center text-sm text-gray-600">
         <p class="mt-2">
           Already have an account?
@@ -79,5 +84,50 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const alertBox = document.getElementById("alertBox");
+
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: name,
+            email,
+            password
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alertBox.className = "p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg";
+          alertBox.innerText = data.message || "Registered successfully!";
+          alertBox.classList.remove("hidden");
+
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+        } else {
+          alertBox.className = "p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg";
+          alertBox.innerText = data.error || "Registration failed";
+          alertBox.classList.remove("hidden");
+        }
+      } catch (err) {
+        alertBox.className = "p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg";
+        alertBox.innerText = "An error occurred. Please try again.";
+        alertBox.classList.remove("hidden");
+      }
+    });
+  </script>
 </body>
 </html>
