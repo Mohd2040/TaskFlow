@@ -45,6 +45,7 @@
   <!-- Script to handle registration -->
   <script>
     document.getElementById('registerForm').addEventListener('submit', async function (e) {
+      console.log("Submitting register form...");
       e.preventDefault();
       const messageBox = document.getElementById('messageBox');
       const payload = {
