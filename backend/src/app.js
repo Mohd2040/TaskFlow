@@ -4,6 +4,7 @@ require("dotenv").config();
 // ✅ استيراد المكتبات
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path"); // 👈 لإدارة المسارات
 const app = express();
 
 // ✅ الإعدادات العامة
@@ -16,15 +17,39 @@ if (!MONGODB_URL) {
 }
 
 // ✅ إعداد الوسطاء (Middlewares)
-app.use(express.static("public"));
 app.use(express.json());
 
-// ✅ إعداد المسارات
+// ✅ تقديم ملفات الواجهة الأمامية من مجلد "public"
+app.use(express.static(path.join(__dirname, "../public")));
+
+// ✅ إعداد المسارات الخاصة بالـ API
 const taskRoutes = require("./routes/tasks");
 const authRoutes = require("./routes/auth");
 
 app.use("/api/tasks", taskRoutes);
 app.use("/api/auth", authRoutes);
+
+// ✅ المسارات للصفحات الرئيسية
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/login.html"));
+});
+
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/register.html"));
+});
+
+app.get("/tasks", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/tasks.html"));
+});
+
+// ✅ التعامل مع أي رابط غير معروف (يُرسل إلى الصفحة الرئيسية)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 // ✅ الاتصال بقاعدة البيانات ثم تشغيل السيرفر
 mongoose
