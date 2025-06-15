@@ -86,48 +86,32 @@
   </footer>
 
   <script>
-    document.getElementById("registerForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const alertBox = document.getElementById("alertBox");
-
-      try {
-        const res = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            username: name,
-            email,
-            password
-          })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          alertBox.className = "p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg";
-          alertBox.innerText = data.message || "Registered successfully!";
-          alertBox.classList.remove("hidden");
-
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 2000);
-        } else {
-          alertBox.className = "p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg";
-          alertBox.innerText = data.error || "Registration failed";
-          alertBox.classList.remove("hidden");
+      document.getElementById('registerForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+    
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+    
+        try {
+          const response = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+          });
+    
+          const data = await response.json();
+    
+          if (response.ok) {
+            alert('Registration successful!');
+            window.location.href = 'login.html';
+          } else {
+            alert(data.message || 'Registration failed!');
+          }
+        } catch (error) {
+          alert('Error connecting to server.');
         }
-      } catch (err) {
-        alertBox.className = "p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg";
-        alertBox.innerText = "An error occurred. Please try again.";
-        alertBox.classList.remove("hidden");
-      }
-    });
-  </script>
+      });
+    </script>
 </body>
 </html>
