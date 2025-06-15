@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 // ✅ تسجيل مستخدم جديد + أول مهمة
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password, firstTask } = req.body;
+    const { name, email, password, firstTask } = req.body;
 
     // تحقق من وجود المستخدم مسبقًا
     const existingUser = await User.findOne({ email });
@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
     }
 
     // إنشاء مستخدم جديد
-    const user = new User({ username, email, password });
+    const user = new User({ name, email, password });
     await user.save();
 
     // ✅ إضافة أول مهمة إذا تم إرسالها
