@@ -21,13 +21,11 @@ app.use(express.json());
 
 // ✅ تقديم ملفات الواجهة الأمامية من مجلد "public"
 app.use(express.static(path.join(__dirname, "../public")));
-
+app.use(express.static('public'));
 // ✅ إعداد المسارات الخاصة بالـ API
-const taskRoutes = require("../routes/tasks");
-const authRoutes = require("../routes/auth");
+app.use("/api/users/tasks", require("../routes/tasks"));
+app.use("/api/users/auth", require("../routes/auth"));
 
-app.use("/api/tasks", taskRoutes);
-app.use("/api/auth", authRoutes);
 
 // ✅ المسارات للصفحات الرئيسية
 app.get("/", (req, res) => {
