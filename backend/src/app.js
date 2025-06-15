@@ -23,8 +23,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
 // ✅ إعداد المسارات الخاصة بالـ API
-const taskRoutes = require("./routes/tasks");
-const authRoutes = require("./routes/auth");
+const taskRoutes = require("../routes/tasks");
+const authRoutes = require("../routes/auth");
 
 app.use("/api/tasks", taskRoutes);
 app.use("/api/auth", authRoutes);
