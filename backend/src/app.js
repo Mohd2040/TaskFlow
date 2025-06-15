@@ -8,10 +8,10 @@ const app = express();
 
 // ✅ الإعدادات العامة
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
+const MONGODB_URL = process.env.MONGODB_URL;
 
-if (!MONGO_URI) {
-  console.error("❌ Error: MONGO_URI not defined in .env");
+if (!MONGODB_URL) {
+  console.error("❌ Error: MONGODB_URL not defined in .env");
   process.exit(1); // الخروج من التطبيق
 }
 
@@ -28,7 +28,7 @@ app.use("/api/auth", authRoutes);
 
 // ✅ الاتصال بقاعدة البيانات ثم تشغيل السيرفر
 mongoose
-  .connect(MONGO_URI, {
+  .connect(MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
