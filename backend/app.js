@@ -23,8 +23,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.static('public'));
 // ✅ إعداد المسارات الخاصة بالـ API
-app.use("/api/users/tasks", require("../routes/tasks"));
-app.use("/api/users/auth", require("../routes/auth"));
+app.use("/api/tasks", require("./routes/tasks"));
+app.use("/api/auth", require("./routes/auth"));
 
 
 // ✅ المسارات للصفحات الرئيسية
