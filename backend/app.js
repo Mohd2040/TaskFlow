@@ -1,15 +1,14 @@
 // ✅ تحميل المتغيرات البيئية
 require("dotenv").config();
-
 // ✅ استيراد المكتبات
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path"); // 👈 لإدارة المسارات
 const app = express();
-
 // ✅ الإعدادات العامة
 const PORT = process.env.PORT || 5000;
 const MONGODB_URL = process.env.MONGODB_URL;
+const authMiddleware = require("./middleware/auth");
 
 if (!MONGODB_URL) {
   console.error("❌ Error: MONGODB_URL not defined in .env");
@@ -26,7 +25,7 @@ const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
 
 app.use("/api/users", authRoutes); // 👈 مفتوح بدون توكن
-app.use("/api/tasks", authMiddleware, taskRoutes); // 👈 محمي بالتوكن
+app.use("/api/tasks", authMiddleware, taskRoutes); // محمي بالتوكن
 
 // ✅ المسارات للصفحات الرئيسية
 app.get("/", (req, res) => {
