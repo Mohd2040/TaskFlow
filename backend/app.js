@@ -20,33 +20,35 @@ if (!MONGODB_URL) {
 app.use(express.json());
 
 // ✅ تقديم ملفات الواجهة الأمامية من مجلد "public"
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "./public")));
 app.use(express.static('public'));
 // ✅ إعداد المسارات الخاصة بالـ API
-app.use("/api/tasks", require("./routes/tasks"));
-app.use("/api/auth", require("./routes/auth"));
+const authRoutes = require("./routes/auth");
+app.use("/api/users", authRoutes);
+
+app.use("/api/users", require("./routes/tasks"));
 
 
 // ✅ المسارات للصفحات الرئيسية
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
+  res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/login.html"));
+  res.sendFile(path.join(__dirname, "./public/login.html"));
 });
 
 app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/register.html"));
+  res.sendFile(path.join(__dirname, "./public/register.html"));
 });
 
 app.get("/tasks", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/tasks.html"));
+  res.sendFile(path.join(__dirname, "./public/tasks.html"));
 });
 
 // ✅ التعامل مع أي رابط غير معروف (يُرسل إلى الصفحة الرئيسية)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
+  res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 // ✅ الاتصال بقاعدة البيانات ثم تشغيل السيرفر
