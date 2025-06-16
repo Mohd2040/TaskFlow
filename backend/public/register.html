@@ -57,9 +57,7 @@
     </section>
   </main>
     <!-- Message area -->
-    <p id="message"></p>
-    <p id="message" class="text-center mb-4"></p>
-    <div id="messageBox" class="mt-3"></div>
+    <p id="message" class="mb-4 text-center text-sm font-semibold"></p>
   </div>
   <!-- Footer -->
   <footer class="bg-gray-800 text-white py-6 mt-12">
@@ -114,7 +112,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
         window.location.href = "/login.html";
       }, 2000);
     } else {
-      messageEl.textContent = data.message || "Registration failed";
+      messageEl.textContent = data.error || data.message || "Registration failed";
       messageEl.style.color = "red";
     }
   } catch (err) {
