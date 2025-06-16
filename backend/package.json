@@ -2,7 +2,7 @@
     "name": "taskflow-backend",
     "version": "1.0.0",
     "description": "Backend API for TaskFlow built with Express",
-    "main": "src/app.js",
+    "main": "app.js",
     "scripts": {
       "start": "node src/app.js",
       "dev": "nodemon src/app.js"
