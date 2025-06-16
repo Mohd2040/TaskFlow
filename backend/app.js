@@ -15,7 +15,6 @@ if (!MONGODB_URL) {
   console.error("❌ Error: MONGODB_URL not defined in .env");
   process.exit(1); // الخروج من التطبيق
 }
-
 // ✅ إعداد الوسطاء (Middlewares)
 app.use(express.json());
 
@@ -24,10 +23,10 @@ app.use(express.static(path.join(__dirname, "./public")));
 app.use(express.static('public'));
 // ✅ إعداد المسارات الخاصة بالـ API
 const authRoutes = require("./routes/auth");
-app.use("/api/users", authRoutes);
+const taskRoutes = require("./routes/tasks");
 
-app.use("/api/users", require("./routes/tasks"));
-
+app.use("/api/users", authRoutes); // 👈 مفتوح بدون توكن
+app.use("/api/tasks", authMiddleware, taskRoutes); // 👈 محمي بالتوكن
 
 // ✅ المسارات للصفحات الرئيسية
 app.get("/", (req, res) => {
