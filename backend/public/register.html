@@ -96,7 +96,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
   const messageEl = document.getElementById("message");
 
   try {
-    const res = await fetch("/api/users/register", {
+    const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -112,7 +112,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
         window.location.href = "/login.html";
       }, 2000);
     } else {
-      messageEl.textContent = data.error || data.message || "Registration failed";
+      messageEl.innerText = data.error || data.message || "Registration failed";
       messageEl.style.color = "red";
     }
   } catch (err) {
