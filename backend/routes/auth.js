@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../models/User");
 const Task = require("../models/Task");
 const jwt = require("jsonwebtoken");
-const { protect } = require("../middleware/authMiddleware");
+const protect = require("../middleware/authMiddleware");
 
 
 // ✅ تسجيل مستخدم جديد 
