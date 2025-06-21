@@ -96,48 +96,29 @@
   </footer>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
+  document.addEventListener("DOMContentLoaded", async () => {
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
 
-    if (!token) {
-      window.location.href = 'login.html';
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) throw new Error("Failed to fetch user");
-
-      const user = await res.json();
-      console.log("✅ USER DATA RECEIVED:", user);// أضف هذا مؤقتًا
-      // ✅ عرض الاسم والإيميل في عناصر HTML
-      document.getElementById("userName").textContent = user.username;
-      document.getElementById("userEmail").textContent = user.email;
-
-    } catch (err) {
-      console.error("Error:", err.message);
-      window.location.href = 'login.html'; // إذا التوكن غير صالح
-    }
+  try {
+    const res = await fetch("/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
-    const token = sessionStorage.getItem("token");
-    if (!token) { window.location.href = 'login.html'; }
-    // Load user info
-    fetch("/api/auth/me", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(res => res.json())
-    .then(user => {
-      console.log("✅ USER DATA RECEIVED:", user); // أضف هذا مؤقتًا
-      document.getElementById("username").textContent = user.username;
-      document.getElementById("useremail").textContent = user.email;
-    });
+    if (!res.ok) throw new Error("Failed to fetch user");
+    const user = await res.json();
+    console.log("✅ USER DATA RECEIVED:", user); // أضف هذا مؤقتًا
+    document.getElementById("username").textContent = user.name;
+    document.getElementById("useremail").textContent = user.email;
 
+  } catch (err) {
+    console.error("Error:", err.message);
+    window.location.href = 'login.html';
+  }
+  });
     // Load tasks
     fetch("/api/tasks", {
       headers: { Authorization: `Bearer ${token}` }
