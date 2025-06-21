@@ -5,10 +5,11 @@ const User = require("../models/User");
 const Task = require("../models/Task");
 const jwt = require("jsonwebtoken");
 
-// ✅ تسجيل مستخدم جديد + أول مهمة
+
+// ✅ تسجيل مستخدم جديد 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, firstTask } = req.body;
+    const { name, email, password } = req.body; // ✅ فقط المطلوب
 
     // تحقق من وجود المستخدم مسبقًا
     const existingUser = await User.findOne({ email });
@@ -19,19 +20,6 @@ router.post("/register", async (req, res) => {
     // إنشاء مستخدم جديد
     const user = new User({ name, email, password });
     await user.save();
-
-    // ✅ إضافة أول مهمة إذا تم إرسالها
-    if (firstTask && firstTask.title) {
-      const task = new Task({
-        user: user._id,
-        title: firstTask.title,
-        description: firstTask.description || "",
-        type: firstTask.type || "personal",
-        priority: firstTask.priority || "medium",
-        status: "not_started",
-      });
-      await task.save();
-    }
 
     res.status(201).json({ message: "Registered successfully!" });
   } catch (err) {
