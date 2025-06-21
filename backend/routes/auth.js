@@ -66,8 +66,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/me", protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("username email");
-    res.json(user);
+    const user = await User.findById(req.user.id).select("username email"); 
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
