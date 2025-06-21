@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 // ✅ تسجيل مستخدم جديد 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body; // ✅ فقط المطلوب
+    const { username, email, password } = req.body; // ✅ فقط المطلوب
 
     // تحقق من وجود المستخدم مسبقًا
     const existingUser = await User.findOne({ email });
@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
     }
 
     // إنشاء مستخدم جديد
-    const user = new User({ name, email, password });
+    const user = new User({ username, email, password });
     await user.save();
 
     res.status(201).json({ message: "Registered successfully!" });
@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
       },
       tasks,
