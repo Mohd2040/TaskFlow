@@ -1,4 +1,4 @@
-//backend\models\User.js
+// backend/models/User.js
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -33,8 +33,8 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-// ✅ Add matchPassword method here:
-userSchema.methods.matchPassword = async function (enteredPassword) {
+// ✅ التحقق من كلمة المرور
+UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
