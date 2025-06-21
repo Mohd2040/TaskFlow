@@ -99,6 +99,8 @@
         if (response.ok) {
           // ✅ Success: store token in sessionStorage and redirect
           sessionStorage.setItem("token", data.token);
+          sessionStorage.setItem('name', data.user.username);
+          sessionStorage.setItem('email', data.user.email);
           messageDiv.textContent = "Login successful! Redirecting...";
           messageDiv.className = "mb-4 text-green-600 font-semibold text-center";
           setTimeout(() => {
