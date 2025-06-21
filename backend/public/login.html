@@ -29,7 +29,7 @@
       <form id="loginForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
-          <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring" id="email" type="email" placeholder="you1@example.com">
+          <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring" id="email" type="email" placeholder="you@example.com">
         </div>
         <div class="mb-6">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
@@ -86,7 +86,7 @@
       const messageDiv = document.getElementById("message");
 
       try {
-        const response = await fetch("/api/users/login", {
+        const response = await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -97,15 +97,15 @@
         const data = await response.json();
 
         if (response.ok) {
-          // Success: store token and redirect
-          localStorage.setItem("token", data.token);
+          // ✅ Success: store token in sessionStorage and redirect
+          sessionStorage.setItem("token", data.token);
           messageDiv.textContent = "Login successful! Redirecting...";
           messageDiv.className = "mb-4 text-green-600 font-semibold text-center";
           setTimeout(() => {
             window.location.href = "tasks.html";
           }, 1500);
         } else {
-          // Error from server
+          // ❌ Error from server
           messageDiv.textContent = data.error || data.message || "Login failed. Please try again.";
           messageDiv.className = "mb-4 text-red-600 font-semibold text-center";
         }
