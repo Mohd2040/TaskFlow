@@ -8,7 +8,7 @@ const app = express();
 // ✅ الإعدادات العامة
 const PORT = process.env.PORT || 5000;
 const MONGODB_URL = process.env.MONGODB_URL;
-const { protect } = require("./middleware/authMiddleware");
+const  protect  = require("./middleware/authMiddleware");
 
 if (!MONGODB_URL) {
   console.error("❌ Error: MONGODB_URL not defined in .env");
