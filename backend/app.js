@@ -24,7 +24,7 @@ app.use(express.static('public'));
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
 
-app.use("/api/users", authRoutes); // 👈 مفتوح بدون توكن
+//app.use("/api/users", authRoutes); // 👈 مفتوح بدون توكن
 app.use("/api/tasks", protect, taskRoutes); // محمي بالتوكن
 
 app.use("/api/auth", require("./routes/auth"));

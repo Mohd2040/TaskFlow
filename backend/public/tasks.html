@@ -100,7 +100,7 @@
     const token = localStorage.getItem("token");
 
     if (!token) {
-      window.location.href = "/public/login.html";
+      window.location.href = 'login.html';
       return;
     }
 
@@ -114,20 +114,19 @@
       if (!res.ok) throw new Error("Failed to fetch user");
 
       const user = await res.json();
-      console.log("✅ USER DATA RECEIVED:", user);
+      console.log("✅ USER DATA RECEIVED:", user);// أضف هذا مؤقتًا
       // ✅ عرض الاسم والإيميل في عناصر HTML
       document.getElementById("userName").textContent = user.username;
       document.getElementById("userEmail").textContent = user.email;
 
     } catch (err) {
       console.error("Error:", err.message);
-      window.location.href = "/public/login.html"; // إذا التوكن غير صالح
+      window.location.href = 'login.html'; // إذا التوكن غير صالح
     }
     });
 
     const token = sessionStorage.getItem("token");
     if (!token) { window.location.href = 'login.html'; }
-
     // Load user info
     fetch("/api/auth/me", {
       headers: { Authorization: `Bearer ${token}` }
