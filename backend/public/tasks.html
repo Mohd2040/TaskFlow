@@ -22,7 +22,7 @@
 
   <section class="bg-indigo-50 py-6 shadow-inner">
     <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-xl font-bold text-indigo-700 mb-1">Welcome, <span id="username">User</span></h2>
+      <h2 class="text-xl font-bold text-indigo-700 mb-1">Welcome, <span id="username">  User</span></h2>
       <p class="text-sm text-gray-600">Email: <span id="useremail">user@example.com</span></p>
     </div>
   </section>
@@ -96,6 +96,35 @@
   </footer>
 
   <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/public/login.html";
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch user");
+
+      const user = await res.json();
+      console.log("✅ USER DATA RECEIVED:", user);
+      // ✅ عرض الاسم والإيميل في عناصر HTML
+      document.getElementById("userName").textContent = user.username;
+      document.getElementById("userEmail").textContent = user.email;
+
+    } catch (err) {
+      console.error("Error:", err.message);
+      window.location.href = "/public/login.html"; // إذا التوكن غير صالح
+    }
+    });
+
     const token = sessionStorage.getItem("token");
     if (!token) { window.location.href = 'login.html'; }
 
