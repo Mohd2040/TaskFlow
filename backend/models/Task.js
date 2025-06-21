@@ -1,3 +1,5 @@
+// backend/models/Task.js
+
 const mongoose = require("mongoose");
 
 const TaskSchema = new mongoose.Schema({
@@ -9,24 +11,31 @@ const TaskSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  // ✅ إضافة حقل 'type'
+  type: {
+    type: String,
+    enum: ["Frontend", "Backend", "DevOps"], // نفس القيم اللي في الـ frontend
+    default: "Frontend", // ممكن تختار قيمة افتراضية
+  },
+  // ✅ تعديل قيم الـ 'enum' لـ 'status' لتطابق قيم الـ frontend
   status: {
     type: String,
-    enum: ["pending", "in progress", "completed"],
-    default: "pending",
+    enum: ["Not Started", "In Progress", "Completed"], // نستخدم نفس القيم النصية من الـ frontend
+    default: "Not Started", // نعدل القيمة الافتراضية أيضاً
   },
   priority: {
     type: String,
-    enum: ["low", "medium", "high"],
-    default: "medium",
+    enum: ["Low", "Medium", "High"], // يفضل توحيدها مع الـ frontend أيضاً
+    default: "Medium",
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  // لو بنضيف مستخدمين لاحقًا
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true, // يفضل جعلها مطلوبة بما أن المهام مرتبطة بمستخدمين
   }
 });
 
