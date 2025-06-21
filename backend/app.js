@@ -27,6 +27,8 @@ const taskRoutes = require("./routes/tasks");
 app.use("/api/users", authRoutes); // 👈 مفتوح بدون توكن
 app.use("/api/tasks", authMiddleware, taskRoutes); // محمي بالتوكن
 
+app.use("/api/auth", require("./routes/auth"));
+
 // ✅ المسارات للصفحات الرئيسية
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./public/index.html"));
