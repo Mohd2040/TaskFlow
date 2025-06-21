@@ -64,10 +64,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ✅ جلب بيانات المستخدم الحالي (protected route)
 router.get("/me", protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("username email"); 
+    // req.user.id بيجي من الـ middleware بتاع protect بعد التحقق من التوكن
+    const user = await User.findById(req.user.id).select("username email");
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+    // 🚀 هنا الحل: رجع بيانات المستخدم كـ JSON response
+    res.json(user);
   } catch (err) {
+    console.error("Error in /me route:", err.message); // اطبع الخطأ عشان تشوفه
     res.status(500).json({ message: "Server error" });
   }
 });

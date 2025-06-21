@@ -125,6 +125,7 @@
               
           } catch (err) {
               console.error("Error:", err.message);
+              console.error("Error fetching user data:", err.message);
               window.location.href = 'login.html';
           }
       });
