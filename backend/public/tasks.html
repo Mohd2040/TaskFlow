@@ -95,92 +95,129 @@
     </div>
   </footer>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", async () => {
-  const token = sessionStorage.getItem("token");
-  if (!token) {
-    window.location.href = 'login.html';
-    return;
-  }
+    <script>
+      let token = null; // مبدئياً نخليه null
 
-  try {
-    const res = await fetch("/api/auth/me", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      document.addEventListener("DOMContentLoaded", async () => {
+          token = sessionStorage.getItem("token"); // هنا بنسند القيمة ليه
 
-    if (!res.ok) throw new Error("Failed to fetch user");
-    const user = await res.json();
-    console.log("✅ USER DATA RECEIVED:", user); // أضف هذا مؤقتًا
-    document.getElementById("username").textContent = user.name;
-    document.getElementById("useremail").textContent = user.email;
+          if (!token) {
+              window.location.href = 'login.html';
+              return;
+          }
 
-  } catch (err) {
-    console.error("Error:", err.message);
-    window.location.href = 'login.html';
-  }
-  });
-    // Load tasks
-    fetch("/api/tasks", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(res => res.json())
-    .then(data => {
-      const tbody = document.getElementById("task-list");
-      tbody.innerHTML = "";
-      data.forEach(task => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td class="px-4 py-2">${task.title}</td>
-          <td class="px-4 py-2">${task.description}</td>
-          <td class="px-4 py-2 text-center">${task.type}</td>
-          <td class="px-4 py-2 text-center">${task.priority}</td>
-          <td class="px-4 py-2 text-center">${task.status}</td>
-          <td class="px-4 py-2 text-center">${task.stage || "N/A"}</td>
-          <td class="px-4 py-2 text-center">${new Date(task.createdAt).toLocaleDateString()}</td>
-          <td class="px-4 py-2 text-center">
-            <button class="text-blue-500 hover:underline" onclick="editTask('${task._id}')"><i class="fas fa-edit"></i> Edit</button>
-            <button class="text-red-500 hover:underline" onclick="deleteTask('${task._id}')"><i class="fas fa-trash"></i> Delete</button>
-          </td>`;
-        tbody.appendChild(row);
+          try {
+              const res = await fetch("/api/auth/me", {
+                  headers: { Authorization: `Bearer ${token}` },
+              });
+
+              if (!res.ok) throw new Error("Failed to fetch user");
+              const user = await res.json();
+              console.log("✅ USER DATA RECEIVED:", user);
+              document.getElementById("username").textContent = user.username;
+              document.getElementById("useremail").textContent = user.email;
+
+              // بعد ما تتأكد أن الـ token موجود وصالح،
+              // تقدر تستدعي دالة لتحميل المهام
+              loadTasks(token); // هنستدعي دالة جديدة هنا
+              setupTaskForm(token); // وهنستدعي دالة جديدة لإعداد الفورم
+              setupLogoutButton(); // وهنستدعي دالة لزر تسجيل الخروج
+              
+          } catch (err) {
+              console.error("Error:", err.message);
+              window.location.href = 'login.html';
+          }
       });
-    });
 
-    // Add task
-    document.getElementById("task-form").addEventListener("submit", e => {
-      e.preventDefault();
-      const task = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        type: document.getElementById("type").value,
-        priority: document.getElementById("priority").value,
-        status: document.getElementById("status").value
-      };
-      fetch("/api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(task)
-      })
-      .then(res => res.json())
-      .then(() => window.location.reload());
-    });
+      // دالة جديدة لتحميل المهام
+      async function loadTasks(currentToken) {
+          try {
+              const res = await fetch("/api/tasks", {
+                  headers: { Authorization: `Bearer ${currentToken}` }
+              });
+              const data = await res.json();
+              const tbody = document.getElementById("task-list");
+              tbody.innerHTML = "";
+              data.forEach(task => {
+                  const row = document.createElement("tr");
+                  row.innerHTML = `
+                      <td class="px-4 py-2">${task.title}</td>
+                      <td class="px-4 py-2">${task.description}</td>
+                      <td class="px-4 py-2 text-center">${task.type}</td>
+                      <td class="px-4 py-2 text-center">${task.priority}</td>
+                      <td class="px-4 py-2 text-center">${task.status}</td>
+                      <td class="px-4 py-2 text-center">${task.stage || "N/A"}</td>
+                      <td class="px-4 py-2 text-center">${new Date(task.createdAt).toLocaleDateString()}</td>
+                      <td class="px-4 py-2 text-center">
+                          <button class="text-blue-500 hover:underline" onclick="editTask('${task._id}', '${currentToken}')"><i class="fas fa-edit"></i> Edit</button>
+                          <button class="text-red-500 hover:underline" onclick="deleteTask('${task._id}', '${currentToken}')"><i class="fas fa-trash"></i> Delete</button>
+                      </td>`;
+                  tbody.appendChild(row);
+              });
+          } catch (error) {
+              console.error('Failed to load tasks:', error);
+          }
+      }
 
-    // Delete task
-    function deleteTask(id) {
-      if (!confirm("Are you sure?")) return;
-      fetch(`/api/tasks/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(() => window.location.reload());
-    }
+      // دالة جديدة لإعداد فورم إضافة المهام
+      function setupTaskForm(currentToken) {
+          document.getElementById("task-form").addEventListener("submit", async e => {
+              e.preventDefault();
+              const task = {
+                  title: document.getElementById("title").value,
+                  description: document.getElementById("description").value,
+                  type: document.getElementById("type").value,
+                  priority: document.getElementById("priority").value,
+                  status: document.getElementById("status").value
+              };
+              try {
+                  const res = await fetch("/api/tasks", {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${currentToken}`
+                      },
+                      body: JSON.stringify(task)
+                  });
+                  if (!res.ok) throw new Error('Failed to add task');
+                  window.location.reload();
+              } catch (error) {
+                  console.error('Error adding task:', error);
+              }
+          });
+      }
 
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("token");
-      window.location.href = "login.html";
-    });
+      // دالة جديدة لحذف المهمة
+      async function deleteTask(id, currentToken) {
+          if (!confirm("Are you sure?")) return;
+          try {
+              const res = await fetch(`/api/tasks/${id}`, {
+                  method: "DELETE",
+                  headers: { Authorization: `Bearer ${currentToken}` }
+              });
+              if (!res.ok) throw new Error('Failed to delete task');
+              window.location.reload();
+          } catch (error) {
+              console.error('Error deleting task:', error);
+          }
+      }
+
+      // دالة جديدة لتعديل المهمة (هتحتاج تكمل الكود بتاعها)
+      async function editTask(id, currentToken) {
+          // هنا هتحتاج تجيب تفاصيل المهمة بالـ id
+          // وتفتح فورم للتعديل وتعبئة البيانات
+          // وبعدين تعمل request نوعه PUT/PATCH للـ API
+          console.log(`Edit task with ID: ${id} and Token: ${currentToken}`);
+          alert('Edit functionality not implemented yet!'); // رسالة مؤقتة
+      }
+
+      // دالة جديدة لزر تسجيل الخروج
+      function setupLogoutButton() {
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+              sessionStorage.removeItem("token");
+              window.location.href = "login.html";
+          });
+      }
   </script>
 </body>
 </html>
