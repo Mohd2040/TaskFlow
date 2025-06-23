@@ -38,7 +38,7 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/taskflow:latest
+          tags: ghcr.io/mohd2040/taskflow:latest
 
       - name: ✅ Done!
         run: echo "🎉 Docker image has been pushed to GHCR successfully!"
