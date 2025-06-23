@@ -1,0 +1,58 @@
+# .github/workflows/build-and-push-backend-docker.yml
+name: Build & Push Backend Docker Image and Deploy to Render
+
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**' 
+
+jobs:
+  build-and-deploy: 
+    name: Build, Push Docker Image, and Deploy to Render
+    runs-on: ubuntu-latest 
+
+      # 1. Checkout repository:
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Log in to GitHub Container Registry 
+      - name: 🔐 Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} 
+
+      # 3. Extract metadata (tags) for Docker image: استخلاص بيانات الصورة الوصفية
+      - name: 📦 Extract metadata (tags) for Docker image
+        id: meta # إعطاء معرف لهذه الخطوة للوصول إلى مخرجاتها
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/taskflow-backend # مسار الصورة في GHCR
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}} # علامة 'latest' للفرع الرئيسي
+            type=sha,format=long # علامة بناءً على معرف الالتزام (commit SHA)
+
+      # 4. Build and push Docker image: بناء صورة Docker ودفعها إلى GHCR
+      - name: ✅ Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend 
+          push: true 
+          tags: ${{ steps.meta.outputs.tags }} 
+          labels: ${{ steps.meta.outputs.labels }} 
+          cache-from: type=gha 
+          cache-to: type=gha,mode=max
+
+      - name: 🚀 Trigger Render Backend Deployment
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }} \
+          --header 'Content-Type: application/json' \
+          --data-binary '{}' \
+          --fail-with-body 
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }} 
