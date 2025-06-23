@@ -16,6 +16,7 @@ jobs:
   build-and-deploy:
     name: Build, Push Docker Image, and Deploy to Render
     runs-on: ubuntu-latest
+    if: false
 
     steps:
       # 1.⬇️ Checkout repository
