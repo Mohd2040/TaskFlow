@@ -5,11 +5,14 @@ on:
   push:
     branches:
       - main
+permissions:
+  contents: read      # مطلوب لسحب الكود
+  packages: write     # ✅ مطلوب لدفع الصور إلى GitHub Container Registry (GHCR)
+  id-token: write 
 
 jobs:
   build-and-push-to-ghcr:
     runs-on: ubuntu-latest
-    if: false
 
     steps:
       - name: ⬇️ Checkout code

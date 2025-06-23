@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-      
+
 permissions:
   contents: read      # مطلوب لسحب الكود
   packages: write     # ✅ مطلوب لدفع الصور إلى GitHub Container Registry (GHCR)
@@ -15,6 +15,7 @@ jobs:
   build-and-push-to-DockerHub: 
     name: Build, Push Docker Image, and Deploy to Render
     runs-on: ubuntu-latest 
+    if: false
 
       # 1. Checkout repository:
     steps:
