@@ -1,0 +1,31 @@
+# .github/workflows/deploy.yml
+
+name: Deploy TaskFlow to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ⬇️ Checkout code
+      uses: actions/checkout@v3
+
+    - name: ⚙️ Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: 📦 Install dependencies
+      run: npm install
+      working-directory: backend
+
+    - name: ✅ Test build or lint (optional)
+      run: echo "Add test commands here if needed"
+
+    - name: 🚀 Deploy to Render
+      run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
