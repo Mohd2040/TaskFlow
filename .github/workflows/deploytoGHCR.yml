@@ -1,14 +1,15 @@
-name: 🚀 Deploy TaskFlow to GitHub Container Registry (GHCR)
+name: 🚀 Deploy TaskFlow to GitHub Container Registry (GHCR) and Render Deploy
 
 on:
-  workflow_dispatch:  # تشغيل يدوي عند الحاجة
+  workflow_dispatch:
   push:
     branches:
       - main
+      
 permissions:
-  contents: read      # مطلوب لسحب الكود
-  packages: write     # ✅ مطلوب لدفع الصور إلى GitHub Container Registry (GHCR)
-  id-token: write 
+  contents: read
+  packages: write
+  id-token: write
 
 jobs:
   build-and-push-to-ghcr:
@@ -44,5 +45,11 @@ jobs:
           push: true
           tags: ghcr.io/mohd2040/taskflow:latest
 
+      - name: 🚀 Trigger Render Deploy
+        run: |
+          curl "$RENDER_DEPLOY_HOOK"
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+
       - name: ✅ Done!
-        run: echo "🎉 Docker image has been pushed to GHCR successfully!"
+        run: echo "🎉 Image pushed & Render deployment triggered!"
