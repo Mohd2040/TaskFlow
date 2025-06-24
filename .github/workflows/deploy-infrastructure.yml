@@ -1,22 +1,16 @@
 # .github/workflows/deploy-infrastructure.yml
 
-# اسم سير العمل الذي سيظهر في واجهة GitHub Actions
-name: Deploy Infrastructure with Terraform
+name: ✔️Deploy Infrastructure with Terraform
 
-# تحديد متى سيتم تشغيل سير العمل
 on:
   push:
     # تشغيل هذا السير عندما يتم الدفع إلى الفرع الرئيسي 'main'
     # فقط عندما تكون التغييرات في مجلد 'devops/terraform'
+    paths:
+        - 'devops/terraform/**' # هذا يعني: أي تغيير داخل مجلد 'devops/terraform' سيشغل هذا السير
     branches:
       - main
-    paths:
-      - 'devops/terraform/**' # هذا يعني: أي تغيير داخل مجلد 'devops/terraform' سيشغل هذا السير
 
-# تحديد الأذونات (Permissions) اللازمة لهذا السير
-# 'contents: read' لسحب الكود
-# 'id-token: write' إذا كنت ستستخدم OIDC (OpenID Connect) للمصادقة مع السحابة،
-# وهذا ليس ضرورياً بشكل مباشر لمزود Render ولكنها ممارسة جيدة لـ IaC
 permissions:
   contents: read
   id-token: write # للحماية من التلاعب بالتوكن
@@ -30,19 +24,17 @@ jobs:
     # خطوات الوظيفة
     steps:
       # 1. سحب الكود من المستودع
-      - name: Checkout repository
+      - name: 📥Checkout repository
         uses: actions/checkout@v4
 
       # 2. إعداد Terraform
       # هذا الإجراء يقوم بتثبيت Terraform على بيئة GitHub Actions
-      - name: Setup Terraform
+      - name: 🔧Setup Terraform
         uses: hashicorp/setup-terraform@v3 # استخدام الإجراء الرسمي من HashiCorp
         with:
-          terraform_version: 1.x.x # استخدم أحدث إصدار مستقر (مثلاً 1.5.0 أو أعلى)
+          terraform_version: 1.5.0 # استخدم أحدث إصدار مستقر (مثلاً 1.5.0 أو أعلى)
 
-      # 3. تهيئة مجلد Terraform (terraform init)
-      # يجب أن تعمل هذه الخطوة من داخل مجلد 'devops/terraform'
-      - name: Terraform Init
+      - name: 📦Terraform Init
         id: init
         run: terraform init
         working-directory: devops/terraform # تحديد مجلد العمل لهذا الأمر
@@ -58,8 +50,6 @@ jobs:
           TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
           TF_VAR_mongo_uri: ${{ secrets.MONGO_URI }}
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
-        # يمكننا حفظ الخطة كملف artifacts لمراجعتها لاحقاً
-        # إذا كانت الخطة تحتوي على معلومات حساسة، يجب التعامل معها بحذر.
 
       # 5. تطبيق التغييرات (terraform apply)
       # هذا يقوم بتوفير (أو تحديث) البنية التحتية على Render.
@@ -73,14 +63,3 @@ jobs:
           TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
           TF_VAR_mongo_uri: ${{ secrets.MONGO_URI }}
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
-
-# ملاحظات إضافية هامة:
-# - يجب أن يكون لديك مجلد 'devops/terraform' في جذر المستودع
-#   يحتوي على ملف 'main.tf' وملف '.terraformignore'.
-# - تأكد أن الـ GitHub Secrets: RENDER_API_KEY, RENDER_OWNER_ID, MONGO_URI, JWT_SECRET
-#   موجودة في مستودعك على GitHub -> Settings -> Secrets and variables -> Actions.
-# - هذا السير سيقوم بتوفير/تحديث خدمة Render الخاصة بك.
-# - إذا كان لديك خدمة Render موجودة بالفعل تديرها يدوياً،
-#   ستحتاج إلى "استيراد" حالتها إلى Terraform أولاً قبل تشغيل apply، وإلا قد يحاول Terraform
-#   إنشاء خدمة جديدة أو يواجه تعارضاً. لكن بما أنك بدأت النشر على Render من Git مباشرة،
-#   يمكن أن يكون هذا السير هو نقطة البداية لإدارة هذه الخدمة بـ Terraform.
