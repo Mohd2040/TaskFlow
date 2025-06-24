@@ -1,7 +1,19 @@
-    # devops/terraform/outputs.tf
+# devops/terraform/aws/outputs.tf
 
-    output "backend_url" {
-      description = "The URL of the deployed TaskFlow Backend service"
-      value       = render_web_service.taskflow_backend_service.service_details[0].url
-    }
-    
+# إخراج عنوان IP العام لـ EC2 instance
+output "backend_public_ip" {
+  description = "The public IP address of the backend server"
+  value       = aws_eip.taskflow_eip.public_ip # استخدام الـ EIP
+}
+
+# إخراج اسم DNS العام لـ EC2 instance
+output "backend_public_dns" {
+  description = "The public DNS of the backend server"
+  value       = aws_instance.taskflow_backend_server.public_dns
+}
+
+# إخراج الـ SSH command للوصول إلى الخادم
+output "ssh_command" {
+  description = "SSH command to connect to the backend server"
+  value       = "ssh -i ~/.ssh/${var.ssh_key_name}.pem ubuntu@${aws_eip.taskflow_eip.public_ip}"
+}
