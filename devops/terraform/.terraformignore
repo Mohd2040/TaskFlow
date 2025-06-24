@@ -1,0 +1,13 @@
+# devops/terraform/.terraformignore
+
+# يتجاهل ملفات حالة Terraform المحلية
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# يتجاهل ملفات الأخطاء ومخرجات التخطيط
+*.tfplan
+*.tfout
+
+# يتجاهل ملفات متغيرات Terraform الخاصة بالقيم الحساسة (إن وجدت)
+*.tfvars
