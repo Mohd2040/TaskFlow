@@ -1,64 +1,53 @@
 # .github/workflows/deploy-infrastructure.yml
-
 name: ✔️Deploy Infrastructure with Terraform
 
 on:
   push:
-    # تشغيل هذا السير عندما يتم الدفع إلى الفرع الرئيسي 'main'
-    # فقط عندما تكون التغييرات في مجلد 'devops/terraform'
+
     paths:
-        - 'devops/terraform/**' # هذا يعني: أي تغيير داخل مجلد 'devops/terraform' سيشغل هذا السير
+        - 'devops/terraform/**' 
     branches:
       - main
 
 permissions:
   contents: read
-  id-token: write # للحماية من التلاعب بالتوكن
+  id-token: write 
 
-# تحديد الوظائف (Jobs) التي سيتم تنفيذها
 jobs:
   terraform:
     name: Terraform Apply
-    runs-on: ubuntu-latest # تشغيل الوظيفة على آلة افتراضية بنظام Ubuntu
+    runs-on: ubuntu-latest 
+    if: false
 
-    # خطوات الوظيفة
     steps:
-      # 1. سحب الكود من المستودع
       - name: 📥Checkout repository
         uses: actions/checkout@v4
 
-      # 2. إعداد Terraform
-      # هذا الإجراء يقوم بتثبيت Terraform على بيئة GitHub Actions
       - name: 🔧Setup Terraform
-        uses: hashicorp/setup-terraform@v3 # استخدام الإجراء الرسمي من HashiCorp
+        uses: hashicorp/setup-terraform@v3 
         with:
-          terraform_version: 1.5.0 # استخدم أحدث إصدار مستقر (مثلاً 1.5.0 أو أعلى)
+          terraform_version: 1.5.0 
 
       - name: 📦Terraform Init
         id: init
         run: terraform init
-        working-directory: devops/terraform # تحديد مجلد العمل لهذا الأمر
+        working-directory: devops/terraform 
 
-      # 4. تخطيط التغييرات (terraform plan)
-      # هذا يعرض التغييرات التي سيتم تطبيقها. يمكن مراجعة هذا في سجلات GitHub Actions.
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
         working-directory: devops/terraform
-        env: # تمرير متغيرات البيئة الحساسة لـ Terraform
+        env: # 
           TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
           TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
           TF_VAR_mongo_uri: ${{ secrets.MONGO_URI }}
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
 
-      # 5. تطبيق التغييرات (terraform apply)
-      # هذا يقوم بتوفير (أو تحديث) البنية التحتية على Render.
-      # يستخدم '-auto-approve' لأتمتة الموافقة على الخطة.
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
         working-directory: devops/terraform
-        env: # تمرير متغيرات البيئة الحساسة لـ Terraform
+        env: 
           TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
           TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
           TF_VAR_mongo_uri: ${{ secrets.MONGO_URI }}

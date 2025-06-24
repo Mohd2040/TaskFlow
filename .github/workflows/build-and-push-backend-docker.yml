@@ -61,11 +61,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       # 6. 🚀Trigger Render Backend Deployment
-    #  - name: Trigger Render Backend Deployment
-    #    run: |
-    #      curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }} \
-    #      --header 'Content-Type: application/json' \
-    #      --data-binary '{}' \
-    #      --fail-with-body
-    #    env:
-    #      RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Trigger Render Backend Deployment
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }} \
+          --header 'Content-Type: application/json' \
+          --data-binary '{}' \
+          --fail-with-body
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
