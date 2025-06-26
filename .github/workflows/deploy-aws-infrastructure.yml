@@ -1,0 +1,70 @@
+# .github/workflows/deploy-aws-infrastructure.yml
+
+# اسم سير العمل
+name: Deploy AWS Infrastructure with Terraform
+
+on:
+  push:
+    branches:
+      - main
+    # تشغيل فقط عندما تكون التغييرات في مجلد 'devops/terraform/aws'
+    paths:
+      - 'devops/terraform/aws/**'
+
+permissions:
+  contents: read
+  id-token: write # مطلوب إذا كنت تستخدم OIDC (ممارسة جيدة)
+
+jobs:
+  terraform-aws:
+    name: Terraform Apply AWS
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository: سحب الكود
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. إعداد Terraform: تثبيت Terraform على بيئة GitHub Actions
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.x.x # استخدم أحدث إصدار مستقر (مثلاً 1.5.0 أو أعلى)
+
+      # 3. تهيئة Terraform (terraform init)
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: devops/terraform/aws # تحديد مجلد العمل لملفات Terraform AWS
+        env:
+          # ✅ تمرير AWS Credentials كمتغيرات بيئة لـ Terraform
+          # Terraform سيكتشفها تلقائياً عند تهيئة مزود AWS
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ vars.AWS_REGION }} # أو يمكنك وضعها كـ Secret أيضاً
+
+      # 4. تخطيط التغييرات (terraform plan)
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        working-directory: devops/terraform/aws
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          # ✅ تمرير المتغيرات التي تعرفتها في variables.tf
+          TF_VAR_aws_region: ${{ vars.AWS_REGION }} # مثال: eu-central-1
+          TF_VAR_ssh_key_name: ${{ secrets.SSH_KEY_NAME }} # اسم مفتاح SSH الذي أنشأته في AWS
+          # إذا كان لديك متغيرات أخرى في variables.tf وليس لها قيم افتراضية، مررها هنا أيضاً.
+
+      # 5. تطبيق التغييرات (terraform apply)
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
+        working-directory: devops/terraform/aws
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+          TF_VAR_ssh_key_name: ${{ secrets.SSH_KEY_NAME }}
