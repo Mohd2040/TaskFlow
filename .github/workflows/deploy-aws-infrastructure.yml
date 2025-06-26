@@ -1,7 +1,7 @@
 # .github/workflows/deploy-aws-infrastructure.yml
 
 # اسم سير العمل
-name: Deploy AWS Infrastructure with Terraform
+name: ✔️Deploy AWS Infrastructure with Terraform
 
 on:
   push:
@@ -17,12 +17,12 @@ permissions:
 
 jobs:
   terraform-aws:
-    name: Terraform Apply AWS
+    name: ✔️Terraform Apply AWS
     runs-on: ubuntu-latest
 
     steps:
       # 1. Checkout repository: سحب الكود
-      - name: Checkout repository
+      - name: 📥Checkout repository
         uses: actions/checkout@v4
 
       # 2. إعداد Terraform: تثبيت Terraform على بيئة GitHub Actions
