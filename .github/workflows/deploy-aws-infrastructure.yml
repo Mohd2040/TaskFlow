@@ -8,8 +8,8 @@ on:
     branches:
       - main
     # تشغيل فقط عندما تكون التغييرات في مجلد 'devops/terraform/aws'
-    paths:
-      - 'devops/terraform/aws/**'
+    #paths:
+      #- 'devops/terraform/aws/**'
 
 permissions:
   contents: read
