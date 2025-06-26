@@ -13,7 +13,8 @@ resource "aws_subnet" "taskflow_public_subnet" {
   vpc_id                  = aws_vpc.taskflow_vpc.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true # لتعيين Public IP تلقائياً للخوادم
-  availability_zone       = "${var.aws_region}a" # ✅ استخدم المنطقة المتوفرة لديك (us-west-1a)
+  # ✅ التغيير هنا: استخدام us-west-1b بدلاً من us-west-1a
+  availability_zone       = "${var.aws_region}b" # تم التحديث لـ us-west-1b
   tags = {
     Name = "${var.project_name}-PublicSubnet"
   }
