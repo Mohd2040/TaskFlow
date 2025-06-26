@@ -13,7 +13,7 @@ resource "aws_subnet" "taskflow_public_subnet" {
   vpc_id                  = aws_vpc.taskflow_vpc.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true # لتعيين Public IP تلقائياً للخوادم
-  availability_zone       = "${var.aws_region}a" # ✅ استخدم المنطقة المتوفرة لديك (مثال: eu-central-1a)
+  availability_zone       = "${var.aws_region}a" # ✅ استخدم المنطقة المتوفرة لديك (us-west-1a)
   tags = {
     Name = "${var.project_name}-PublicSubnet"
   }
@@ -46,13 +46,12 @@ resource "aws_route_table_association" "taskflow_public_rt_assoc" {
 }
 
 # 6. تعريف مجموعة الأمان (Security Group)
-# هذا هو جدار الحماية لـ EC2 instance الخاص بك
 resource "aws_security_group" "taskflow_sg" {
   name        = "${var.project_name}-SecurityGroup"
   description = "Allow SSH, HTTP, and HTTPS traffic"
   vpc_id      = aws_vpc.taskflow_vpc.id
 
-  # السماح بـ SSH (Port 22) من أي مكان (0.0.0.0/0)
+  # السماح بـ SSH (Port 22) من أي مكان
   ingress {
     from_port   = 22
     to_port     = 22
@@ -97,19 +96,15 @@ resource "aws_instance" "taskflow_backend_server" {
   vpc_security_group_ids = [aws_security_group.taskflow_sg.id] # ربط مجموعة الأمان
   key_name      = var.ssh_key_name # اسم مفتاح SSH للوصول إلى الخادم
 
-  # (اختياري) User Data: يمكن استخدامها لتشغيل سكربت عند بدء تشغيل الخادم
-  # يمكن أن تقوم بتثبيت Docker وتطبيقك هنا، لكن سنقوم بذلك يدوياً أولاً.
-  # user_data = filebase64("${path.module}/user_data.sh")
-
   tags = {
     Name = "${var.project_name}-BackendServer"
-    Environment = "Dev" # يمكن تغييرها لـ Prod لاحقاً
+    Environment = "Dev"
   }
 }
 
 # 8. تعريف Elastic IP (عنوان IP عام ثابت)
 resource "aws_eip" "taskflow_eip" {
-  vpc  = true
+  vpc        = true
   instance   = aws_instance.taskflow_backend_server.id # ربط الـ EIP بالخادم
   tags = {
     Name = "${var.project_name}-EIP"

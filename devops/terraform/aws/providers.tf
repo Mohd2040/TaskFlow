@@ -6,16 +6,16 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0" # ✅ استخدم أحدث إصدار لمزود AWS (تحقق من registry.terraform.io)
+      version = "~> 5.0" # استخدم أحدث إصدار مستقر (تحقق من registry.terraform.io)
     }
   }
   # تكوين الـ backend لتخزين حالة Terraform في S3
   backend "s3" {
-    bucket         = "taskflow-terraform-state-mohamed" # ✅ اسم Bucket فريد عالمياً! استبدل باسم فريد خاص بك
+    bucket         = "taskflow-terraform-state-mohd2040" # ✅ اسم Bucket فريد عالمياً، استخدم الاسم الذي أنشأته
     key            = "taskflow-backend/terraform.tfstate" # مسار ملف الحالة داخل الـ Bucket
-    region         = "eu-central-1" # ✅ نفس المنطقة التي ستنشر فيها مواردك
+    region         = "us-west-1" # ✅ تم التحديث إلى us-west-1
     encrypt        = true # تشفير ملف الحالة في S3
-    dynamodb_table = "taskflow-terraform-locks" # ✅ اسم جدول DynamoDB للقفل (للتزامن)
+    dynamodb_table = "taskflow-terraform-locks" # ✅ اسم جدول DynamoDB للقفل
   }
 }
 

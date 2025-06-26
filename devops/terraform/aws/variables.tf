@@ -3,7 +3,7 @@
 variable "aws_region" {
   description = "AWS region for resource deployment"
   type        = string
-  default     = "eu-central-1" # ✅ اختر منطقتك المفضلة هنا
+  default     = "us-west-1" # ✅ تم التحديث إلى us-west-1
 }
 
 variable "project_name" {
@@ -20,18 +20,13 @@ variable "instance_type" {
 }
 
 variable "ami_id" {
-  description = "AMI ID for the EC2 instance (e.g., Ubuntu 22.04 LTS)"
+  description = "AMI ID for the EC2 instance (e.g., Ubuntu 22.04 LTS for us-west-1)"
   type        = string
-  # ✅ ابحث عن AMI ID المناسب لمنطقتك (مثلاً: Ubuntu Server 22.04 LTS)
-  # يمكنك إيجاده عند محاولة إنشاء EC2 instance يدوياً في AWS Console
-  # أو البحث عن 'ami-053b0d53c279c657a' لـ eu-central-1 (قد يتغير)
-  default     = "ami-053b0d53c279c657a" 
+  default     = "ami-0b04c8f3319087799" # ✅ AMI ID لـ Ubuntu 22.04 LTS في us-west-1
 }
 
 variable "ssh_key_name" {
   description = "Name of the SSH key pair in AWS"
   type        = string
-  # ✅ يجب أن يكون لديك مفتاح SSH موجود في AWS (EC2 -> Key Pairs)
-  # ونسخة من المفتاح الخاص (.pem) على جهازك للوصول إلى الخادم
-  default     = "taskflow-ssh-key" 
+  default     = "taskflow-ssh-key" # استخدم اسم مفتاح SSH الذي أنشأته في AWS
 }
