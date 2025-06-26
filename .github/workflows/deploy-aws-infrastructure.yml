@@ -1,7 +1,7 @@
 # .github/workflows/deploy-aws-infrastructure.yml
 
 # اسم سير العمل
-name: ✔️Deploy AWS Infrastructure with Terraform
+name: 👌✔️Deploy AWS Infrastructure with Terraform
 
 on:
   push:
