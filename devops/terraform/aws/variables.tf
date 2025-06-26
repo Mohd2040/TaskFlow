@@ -22,7 +22,7 @@ variable "instance_type" {
 variable "ami_id" {
   description = "AMI ID for the EC2 instance (e.g., Ubuntu 22.04 LTS for us-west-1)"
   type        = string
-  default     = "ami-0b04c8f3319087799" # ✅ AMI ID لـ Ubuntu 22.04 LTS في us-west-1
+  default     = "ami-043b59f1d11f8f189" # ✅ AMI ID لـ Ubuntu 22.04 LTS في us-west-1ami-043b59f1d11f8f189
 }
 
 variable "ssh_key_name" {
