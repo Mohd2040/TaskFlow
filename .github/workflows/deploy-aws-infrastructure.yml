@@ -19,6 +19,7 @@ jobs:
   terraform-aws:
     name: ✔️Terraform Apply AWS
     runs-on: ubuntu-latest
+    if: false
 
     steps:
       # 1. Checkout repository: سحب الكود
