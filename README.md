@@ -76,35 +76,8 @@ The application allows users to:
   - 📥 Pull and 🏃 Run image
 
 🗺️ Project Architecture
-graph TD
-    subgraph "Local Development/Git"
-        A[Developer Code] --> B(git push)
-    end
 
-    subgraph "GitHub Repository"
-        B --> C[GitHub Repo]
-    end
-
-    subgraph "CI/CD Pipelines (GitHub Actions)"
-        C --> D1{Build & Push Docker Image}
-        D1 --> E1(GHCR)
-        D1 --> E2(Docker Hub)
-        C -- (Terraform code push) --> D2{Terraform Apply}
-    end
-
-    subgraph "Cloud Platforms"
-        E1 --> F1[Render.com]
-        E2 --> F2[Render.com]
-        D1 --> F1
-        D2 --> G[AWS Infra]
-        G --> H(EC2 Instance with Docker)
-        H --> I[MongoDB Atlas]
-    end
-
-    subgraph "User Access"
-        J[Web Browser] --> F1 & I
-        J --> H & I
-    end
+![TaskFlow Project Architecture](docs/images/project-architecture.svg)
 
 🏁 Getting Started
 📋 Prerequisites
