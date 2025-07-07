@@ -1,0 +1,19 @@
+    # kubernetes/helm/taskflow-app/templates/backend-service.yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ include "taskflow-app.fullname" . }}-backend
+      labels:
+        {{- include "taskflow-app.labels" . | nindent 4 }}
+        app.kubernetes.io/component: backend
+    spec:
+      type: {{ .Values.backend.service.type }}
+      ports:
+        - port: 80 # المنفذ الذي سيستمع عليه الـ Service
+          targetPort: {{ .Values.backend.service.port }} # المنفذ داخل الحاوية
+          protocol: TCP
+          name: http
+      selector:
+        {{- include "taskflow-app.selectorLabels" . | nindent 4 }}
+        app.kubernetes.io/component: backend
+    
