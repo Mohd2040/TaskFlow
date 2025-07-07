@@ -1,0 +1,24 @@
+# kubernetes/helm/taskflow-app/values.yaml
+
+# Backend Service Configuration
+backend:
+  image:
+    repository: ghcr.io/mohd2040/taskflow/taskflow-backend
+    tag: latest
+    pullPolicy: IfNotPresent # Always, Never, IfNotPresent
+  service:
+    type: ClusterIP 
+    port: 5000 
+  env:
+    MONGO_URI: MONGO_URI
+    JWT_SECRET: JWT_SECRET
+
+frontend:
+  enabled: false # إذا كان الـ backend يخدم الـ frontend
+  image:
+    repository: nginx 
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
