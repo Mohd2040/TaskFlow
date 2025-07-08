@@ -3,7 +3,7 @@
         backend:
           image:
             repository: ghcr.io/mohd2040/taskflow/taskflow-backend # ✅ تأكد من هذا
-            tag: sha-48d7de322933e8eef5476ddd87547bd168783095 # ✅ تأكد من هذا
+            tag: "" # ✅ تأكد من هذا
             pullPolicy: IfNotPresent
           service:
             type: ClusterIP
