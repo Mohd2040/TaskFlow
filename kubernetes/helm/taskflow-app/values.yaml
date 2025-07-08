@@ -9,6 +9,6 @@
             type: ClusterIP
             port: 5000 # المنفذ الذي يستمع عليه تطبيق Node.js داخل الحاوية
           env:
-            MONGODB_URl: "mongodb+srv://apiuser:j3HR1ph4HZ7qxK0d@task-manager-api-cluste.p3adibr.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=task-manager-api-Cluster" # ✅ استبدل برابط MongoDB Atlas
+            MONGODB_URL: "mongodb+srv://apiuser:j3HR1ph4HZ7qxK0d@task-manager-api-cluste.p3adibr.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=task-manager-api-Cluster" # ✅ استبدل برابط MongoDB Atlas
             JWT_SECRET: "JWT_SECRET123" # ✅ استبدل بمفتاح JWT السري
         
