@@ -1,41 +1,38 @@
-    # kubernetes/helm/taskflow-app/templates/backend-deployment.yaml
-    apiVersion: apps/v1
-    kind: Deployment
+# kubernetes/helm/taskflow-app/templates/backend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskflow-backend-deployment
+  labels:
+    app: taskflow-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taskflow-backend
+  template:
     metadata:
-      name: {{ include "taskflow-app.fullname" . }}-backend
       labels:
-        {{- include "taskflow-app.labels" . | nindent 4 }}
-        app.kubernetes.io/component: backend
+        app: taskflow-backend
     spec:
-      replicas: 1 # يمكن تغيير هذا لزيادة عدد النسخ
-      selector:
-        matchLabels:
-          {{- include "taskflow-app.selectorLabels" . | nindent 6 }}
-          app.kubernetes.io/component: backend
-      template:
-        metadata:
-          labels:
-            {{- include "taskflow-app.selectorLabels" . | nindent 8 }}
-            app.kubernetes.io/component: backend
-        spec:
-          containers:
-            - name: backend
-              image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
-              imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
-              ports:
-                - name: http
-                  containerPort: {{ .Values.backend.service.port }}
-                  protocol: TCP
-              env:
-                - name: MONGO_URI
-                  value: {{ .Values.backend.env.MONGO_URI | quote }} # استخدام quote لضمان التعامل الصحيح مع السلاسل
-                - name: JWT_SECRET
-                  value: {{ .Values.backend.env.JWT_SECRET | quote }}
-              resources:
-                limits:
-                  cpu: 200m # 0.2 من نواة CPU
-                  memory: 256Mi # 256 ميغابايت ذاكرة
-                requests:
-                  cpu: 100m
-                  memory: 128Mi
-    
+      containers:
+      - name: backend
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+        ports:
+          - name: http
+            containerPort: {{ .Values.backend.service.port }}
+            protocol: TCP
+        env:
+          - name: MONGO_URI
+            value: {{ .Values.backend.env.MONGO_URI | quote }}
+          - name: JWT_SECRET
+            value: {{ .Values.backend.env.JWT_SECRET | quote }}
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        

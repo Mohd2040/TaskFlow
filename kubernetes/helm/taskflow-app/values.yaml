@@ -1,24 +1,14 @@
-# kubernetes/helm/taskflow-app/values.yaml
+        # kubernetes/helm/taskflow-app/values.yaml
 
-# Backend Service Configuration
-backend:
-  image:
-    repository: ghcr.io/mohd2040/taskflow/taskflow-backend
-    tag: latest
-    pullPolicy: IfNotPresent # Always, Never, IfNotPresent
-  service:
-    type: ClusterIP 
-    port: 5000 
-  env:
-    MONGO_URI: MONGO_URI
-    JWT_SECRET: JWT_SECRET
-
-frontend:
-  enabled: false # إذا كان الـ backend يخدم الـ frontend
-  image:
-    repository: nginx 
-    tag: latest
-    pullPolicy: IfNotPresent
-  service:
-    type: ClusterIP
-    port: 80
+        backend:
+          image:
+            repository: ghcr.io/mohd2040/taskflow/taskflow-backend # ✅ تأكد من هذا
+            tag: sha-13091f7ecf773023418cfc05e47ae770bed99f41 # ✅ تأكد من هذا
+            pullPolicy: IfNotPresent
+          service:
+            type: ClusterIP
+            port: 5000 # المنفذ الذي يستمع عليه تطبيق Node.js داخل الحاوية
+          env:
+            MONGO_URI: "mongodb+srv://apiuser:j3HR1ph4HZ7qxK0d@task-manager-api-cluste.p3adibr.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=task-manager-api-Cluster" # ✅ استبدل برابط MongoDB Atlas
+            JWT_SECRET: "JWT_SECRET123" # ✅ استبدل بمفتاح JWT السري
+        
