@@ -13,5 +13,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-  app: taskflow-backend
-  
+    app: taskflow-backend
