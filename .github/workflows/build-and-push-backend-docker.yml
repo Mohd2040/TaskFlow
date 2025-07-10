@@ -8,6 +8,10 @@ on:
     paths:
     - 'TaskFlow/backend/**'
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/taskflow-backend
+
 permissions:
   contents: read      # لسحب الكود
   packages: write     # لدفع الصور إلى GitHub Container Registry (GHCR)
@@ -22,6 +26,10 @@ jobs:
       # 1.⬇️ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Get current date and time for image tag
+        id: date
+        run: echo "::set-output name=now::$(date +'%Y%m%d-%H%M%S')"
 
       # 2.🔐 Log in to GitHub Container Registry (GHCR)
       - name: Log in to GitHub Container Registry
@@ -48,8 +56,10 @@ jobs:
             ghcr.io/${{ github.repository }}/taskflow-backend # صورة GHCR
             ${{ secrets.DOCKER_HUB_USERNAME }}/taskflow-backend # صورة Docker Hub
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=long
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.date.outputs.now }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      #      type=raw,value=latest,enable={{is_default_branch}}
+      #      type=sha,format=long
 
       # 5.📦 Build and push Docker image
       - name: Build and push Docker image
