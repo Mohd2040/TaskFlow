@@ -1,14 +1,14 @@
-        # kubernetes/helm/taskflow-app/values.yaml
+# kubernetes/helm/taskflow-app/values.yaml
 
-        backend:
-          image:
-            repository: ghcr.io/mohd2040/taskflow/taskflow-backend # ✅ تأكد من هذا
-            tag: sha-2b1c31beba592203e7c87f9b03ead87874ac2610 # ✅ تأكد من هذا
-            pullPolicy: IfNotPresent
-          service:
-            type: ClusterIP
-            port: 5000 # المنفذ الذي يستمع عليه تطبيق Node.js داخل الحاوية
-          env:
-            MONGODB_URL: MONGODB_URL # ✅ استبدل برابط MongoDB Atlas
-            JWT_SECRET: "JWT_SECRET123" # ✅ استبدل بمفتاح JWT السري
-        
+backend:
+  image:
+    repository: ghcr.io/mohd2040/taskflow/taskflow-backend
+    tag: sha-2b1c31beba592203e7c87f9b03ead87874ac2610 # تأكد أن هذا هو الـ SHA الصحيح أو أحدث Tag
+    pullPolicy: IfNotPresent
+  service:
+    type: LoadBalancer
+    port: 5000
+  env:
+    # ✅ تم حذف MONGODB_URL و JWT_SECRET من هنا
+    # MONGO_URI: "..."
+    # JWT_SECRET: "..."
