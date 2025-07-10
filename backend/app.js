@@ -5,7 +5,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path"); // 👈 لإدارة المسارات
 const app = express();
-// ✅ الإعدادات العامة
+// ✅ general
 const PORT = process.env.PORT || 5000;
 const MONGODB_URL = process.env.MONGODB_URL;
 const  protect  = require("./middleware/authMiddleware");
@@ -58,7 +58,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("✅ Connected to MongoDB Atlas");
+    console.log("✅ Connected to MongoDB Atlas"); 
 
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on http://localhost:${PORT}`);
