@@ -3,7 +3,7 @@
 backend:
   image:
     repository: ghcr.io/mohd2040/taskflow/taskflow-backend
-    tag: "20250711-042435"
+    tag: "20250711-044019"
     pullPolicy: IfNotPresent
   service:
     type: LoadBalancer
