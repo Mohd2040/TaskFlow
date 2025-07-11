@@ -166,4 +166,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ## 🤝 Contribution
 
 👨‍💻 Developed by **Mohamed AbuShallouf 🇵🇸**  
-🔗 [GitHub](https://github.com/Mohd2040/TaskFlow) | [Upwork](https://upwork.com/freelancers/mohammeda857) | [LinkedIn](https://linkedin.com/in/mohamed-abushallouf)
+
+🔗 [GitHub](https://github.com/Mohd2040/TaskFlow) 
+🔗 [Upwork](https://upwork.com/freelancers/mohammeda857) 
+🔗 [LinkedIn](https://linkedin.com/in/mohamed-abushallouf)
