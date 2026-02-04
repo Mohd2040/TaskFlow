@@ -102,17 +102,17 @@ jobs:
       # 📊 DEFECTDOJO INTEGRATION
       # ────────────────────────────────────────────────────────
       # Enable DefectDojo: auto-uploads results after scans
-      defectdojo_enabled: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    #  defectdojo_enabled: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
       
       # 🤖 Smart Auto-Management: 
       # - Creates Product if not exists (using repo name)
       # - Creates Engagement if not exists (using branch name)
       # - Updates existing tests with new findings
       # - No manual setup needed! ✨
-      defectdojo_auto_create: true
+    #  defectdojo_auto_create: true
       
       # Product Type in DefectDojo (will be created if not exists)
-      defectdojo_product_type: 'Web Application'
+    #  defectdojo_product_type: 'Web Application'
       # Other options: 'Mobile App', 'API', 'Infrastructure', etc.
     
     # ────────────────────────────────────────────────────────
