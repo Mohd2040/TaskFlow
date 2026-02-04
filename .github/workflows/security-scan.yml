@@ -1,0 +1,165 @@
+# ═══════════════════════════════════════════════════════════════
+# 🔒 Security Scan Workflow - Ready to Use Template
+# ═══════════════════════════════════════════════════════════════
+# 
+# 📋 Quick Setup Instructions:
+# 1. Copy this file to: .github/workflows/security-scan.yml
+# 2. Update the 'uses' path to point to your reusable workflow repo
+# 3. Configure secrets in repository settings (if using DefectDojo)
+# 4. Push to your branch - that's it! ✅
+#
+# 🔐 Required Secrets (only if using DefectDojo):
+#   - DEFECTDOJO_URL: Your DefectDojo server URL
+#   - DEFECTDOJO_TOKEN: Your DefectDojo API token
+#
+# ═══════════════════════════════════════════════════════════════
+
+name: Security Vulnerability Scan
+
+on:
+  # 🎯 Trigger on push to specific branches
+  push:
+    branches: 
+      - main
+      - develop
+      - devops3
+      # Add your branches here
+  
+  # 🔀 Trigger on pull requests
+  pull_request:
+    branches: 
+      - main
+      - develop
+      - devops3
+  
+  # ⏰ Schedule: Run every Monday at 2 AM UTC (optional)
+  # schedule:
+  #   - cron: '0 2 * * 1'
+  
+  # 🎮 Manual trigger with custom DAST URL
+  workflow_dispatch:
+    inputs:
+      dast_url:
+        description: 'Target URL for DAST scan (leave empty to skip DAST)'
+        required: false
+        type: string
+        default: ''
+
+# 🔒 Permissions needed
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  security-scan:
+    name: Run Security Scans
+    # ═══════════════════════════════════════════════════════════
+    # 🔧 IMPORTANT: Update this path to your reusable workflow!
+    # ═══════════════════════════════════════════════════════════
+    # Examples:
+    #   - Same repo: ./.github/workflows/reusable-security.yml
+    #   - Different repo: org/repo/.github/workflows/reusable-security.yml@main
+    # ═══════════════════════════════════════════════════════════
+    uses: Mohd2040/security-qa-assistant@devops3/.github/workflows/reusable-security.yml
+    
+    with:
+      # ────────────────────────────────────────────────────────
+      # 🏗️ PROJECT CONFIGURATION
+      # ────────────────────────────────────────────────────────
+      project_type: 'node'  # Options: node, python, java, go, dotnet
+      
+      # ────────────────────────────────────────────────────────
+      # 🔍 SCA (Software Composition Analysis) SCANS
+      # ────────────────────────────────────────────────────────
+      run_npm_audit: true              # npm security audit
+      run_trivy_sca: true              # Trivy dependency scan
+      run_dependency_check: true        # OWASP Dependency-Check
+      
+      # ────────────────────────────────────────────────────────
+      # 🔎 SAST (Static Application Security Testing) SCANS
+      # ────────────────────────────────────────────────────────
+      run_Semgrep_sca: true            # Semgrep SAST scan
+      run_codeql: true                 # GitHub CodeQL analysis
+      codeql_languages: 'javascript-typescript'  # Options: javascript-typescript, python, java, go, cpp, csharp
+      codeql_queries: 'security-extended'        # Options: security-extended, security-and-quality
+      
+      # ────────────────────────────────────────────────────────
+      # 🌐 DAST (Dynamic Application Security Testing) SCAN
+      # ────────────────────────────────────────────────────────
+      # Set your application URL here OR leave empty to skip DAST
+      dast_url: ${{ github.event.inputs.dast_url || '' }}
+      # Example: dast_url: 'https://your-app.example.com'
+      
+      # DAST Authentication (if needed)
+      dast_auth_enabled: false
+      # dast_login_url: 'https://your-app.example.com/login'
+      # dast_username_field: 'username'
+      # dast_password_field: 'password'
+      # dast_success_indicator: '/dashboard'
+      
+      # ────────────────────────────────────────────────────────
+      # 📊 DEFECTDOJO INTEGRATION
+      # ────────────────────────────────────────────────────────
+      # Enable DefectDojo: auto-uploads results after scans
+      defectdojo_enabled: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+      
+      # 🤖 Smart Auto-Management: 
+      # - Creates Product if not exists (using repo name)
+      # - Creates Engagement if not exists (using branch name)
+      # - Updates existing tests with new findings
+      # - No manual setup needed! ✨
+      defectdojo_auto_create: true
+      
+      # Product Type in DefectDojo (will be created if not exists)
+      defectdojo_product_type: 'Web Application'
+      # Other options: 'Mobile App', 'API', 'Infrastructure', etc.
+    
+    # ────────────────────────────────────────────────────────
+    # 🔐 SECRETS (Configure in: Settings > Secrets > Actions)
+    # ────────────────────────────────────────────────────────
+    secrets: inherit
+    # OR specify explicitly:
+    # secrets:
+    #   DEFECTDOJO_URL: ${{ secrets.DEFECTDOJO_URL }}
+    #   DEFECTDOJO_TOKEN: ${{ secrets.DEFECTDOJO_TOKEN }}
+    #   dast_username: ${{ secrets.DAST_USERNAME }}  # If using DAST auth
+    #   dast_password: ${{ secrets.DAST_PASSWORD }}  # If using DAST auth
+
+# ═══════════════════════════════════════════════════════════════
+# 📚 ADDITIONAL NOTES
+# ═══════════════════════════════════════════════════════════════
+#
+# 🎯 What this workflow does:
+#   ✅ Scans dependencies for known vulnerabilities (SCA)
+#   ✅ Analyzes code for security issues (SAST)
+#   ✅ Tests running application for vulnerabilities (DAST - optional)
+#   ✅ Auto-uploads results to DefectDojo (if enabled)
+#   ✅ Generates comprehensive security reports
+#   ✅ Blocks merges if critical vulnerabilities found
+#
+# 🤖 DefectDojo Smart Features:
+#   ✅ Auto-creates Product (named after your repo)
+#   ✅ Auto-creates Engagement (named after your branch)
+#   ✅ Auto-creates Tests on first scan
+#   ✅ Auto-updates Tests on subsequent scans
+#   ✅ Deduplicates findings automatically
+#   ✅ Zero manual configuration needed!
+#
+# 📊 Results Location:
+#   • GitHub Actions Summary: Check workflow run page
+#   • Artifacts: Download from workflow run
+#   • DefectDojo: Organized by Product > Engagement > Tests
+#
+# 🔧 Customization Tips:
+#   • Disable scans you don't need (set to false)
+#   • Add more branches to trigger on
+#   • Adjust schedule for regular scans
+#   • Configure DAST for your application
+#
+# 🆘 Troubleshooting:
+#   • If DefectDojo upload fails: Check URL and token
+#   • If scans fail: Check runner has required tools
+#   • If too many findings: Start with critical/high only
+#
+# ═══════════════════════════════════════════════════════════════
