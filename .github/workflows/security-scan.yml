@@ -61,7 +61,7 @@ jobs:
     #   - Same repo: ./.github/workflows/reusable-security.yml
     #   - Different repo: org/repo/.github/workflows/reusable-security.yml@main
     # ═══════════════════════════════════════════════════════════
-    uses: Mohd2040/security-qa-assistant@devops3/.github/workflows/reusable-security.yml
+    uses: Mohd2040/security-qa-assistant/.github/workflows/reusable-security.yml@devops3
     
     with:
       # ────────────────────────────────────────────────────────
