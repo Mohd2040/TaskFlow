@@ -2,9 +2,9 @@ name: Security Vulnerability Scan
 
 on:
   # 🎯 Trigger on push to specific branches
-  push:
-    branches: 
-      - main
+  #push:
+    #branches: 
+    #  - main
       # Add your branches here
   # 🎮 Manual trigger with custom DAST URL
   workflow_dispatch:
