@@ -15,7 +15,38 @@ on:
         #default: '["self-hosted", "ubuntudevops"]'
         default: '["ubuntu-latest"]'    
       dast_url:
-        description: 'Target URL for DAST scan (leave empty to skip DAST)'
+        description: 'Target URL for DAST scan (optional)'
+        required: false
+        type: string
+        #default: ''
+        default: 'https://iwa-camp-system-1.onrender.com/'
+      dast_login_url:
+        description: 'Login page URL for authenticated scanning'
+        required: false
+        type: string
+        default: 'https://iwa-camp-system-1.onrender.com/login'
+      dast_success_indicator:
+        description: 'URL pattern or text indicating successful login'
+        required: false
+        type: string
+        default: 'https://iwa-camp-system-1.onrender.com/reports'
+      dast_username_field:
+        description: 'Username field name in login form'
+        required: false
+        type: string
+        default: ''
+      dast_password_field:
+        description: 'Password field name in login form'
+        required: false
+        type: string
+        default: ''
+      dast_username:
+        description: 'Username for DAST login (fallback if DAST_USERNAME secret is not set)'
+        required: false
+        type: string
+        default: ''
+      dast_password:
+        description: 'Password for DAST login (fallback if DAST_PASSWORD secret is not set) — visible in plain text'
         required: false
         type: string
         default: ''
@@ -38,7 +69,13 @@ jobs:
       run_trivy_sca: true
       run_npm_audit: true
       run_codeql: true
+      dast_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_url || '' }}
+      dast_login_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_login_url || '' }}
+      dast_success_indicator: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_success_indicator || '' }}
+      dast_username_field: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_username_field || 'username' }}
+      dast_password_field: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_password_field || 'password' }}
+      dast_username: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_username || '' }}
+      dast_password: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_password || '' }}
     #  defectdojo_enabled: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     #  defectdojo_auto_create: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-      dast_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_url || '' }}
     secrets: inherit
