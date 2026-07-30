@@ -1,0 +1,17 @@
+name: SAST + SCA
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  scan:
+    uses: Mohd2040/vulnerability-test-tools/.github/workflows/sast-sca-reusable.yml@sca-sast
+    with:
+      client: "TaskFlow"
+      # light: true                # uncomment for Semgrep+Gitleaks only, informational, never blocks merge
+      # skip: "codeql"             # comma-separated stages to skip (ignored if light: true)
+      runner_label: "ubuntu-latest"   # only needed if your runner uses a different label
