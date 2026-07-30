@@ -69,13 +69,13 @@ jobs:
       run_trivy_sca: true
       run_npm_audit: true
       run_codeql: true
-      dast_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_url || '' }}
-      dast_login_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_login_url || '' }}
-      dast_success_indicator: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_success_indicator || '' }}
-      dast_username_field: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_username_field || 'username' }}
-      dast_password_field: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_password_field || 'password' }}
-      dast_username: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_username || '' }}
-      dast_password: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_password || '' }}
+    #  dast_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_url || '' }}
+    #  dast_login_url: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_login_url || '' }}
+    #  dast_success_indicator: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_success_indicator || '' }}
+    #  dast_username_field: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_username_field || 'username' }}
+    #  dast_password_field: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_password_field || 'password' }}
+    #  dast_username: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_username || '' }}
+    #  dast_password: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dast_password || '' }}
     #  defectdojo_enabled: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     #  defectdojo_auto_create: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     secrets: inherit
