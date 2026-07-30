@@ -9,7 +9,7 @@ on:
 
 jobs:
   scan:
-    uses: Mohd2040/vulnerability-test-tools/.github/workflows/sast-sca-reusable.yml@sca-sast-devops
+    uses: Mohd2040/vulnerability-test-tools/.github/workflows/reusable-security.yml@sca-sast-devops
     with:
       client: "TaskFlow"
       # light: true                # uncomment for Semgrep+Gitleaks only, informational, never blocks merge
