@@ -14,42 +14,6 @@ on:
         type: string
         #default: '["self-hosted", "ubuntudevops"]'
         default: '["ubuntu-latest"]'    
-      dast_url:
-        description: 'Target URL for DAST scan (optional)'
-        required: false
-        type: string
-        #default: ''
-        default: 'https://iwa-camp-system-1.onrender.com/'
-      dast_login_url:
-        description: 'Login page URL for authenticated scanning'
-        required: false
-        type: string
-        default: 'https://iwa-camp-system-1.onrender.com/login'
-      dast_success_indicator:
-        description: 'URL pattern or text indicating successful login'
-        required: false
-        type: string
-        default: 'https://iwa-camp-system-1.onrender.com/reports'
-      dast_username_field:
-        description: 'Username field name in login form'
-        required: false
-        type: string
-        default: ''
-      dast_password_field:
-        description: 'Password field name in login form'
-        required: false
-        type: string
-        default: ''
-      dast_username:
-        description: 'Username for DAST login (fallback if DAST_USERNAME secret is not set)'
-        required: false
-        type: string
-        default: ''
-      dast_password:
-        description: 'Password for DAST login (fallback if DAST_PASSWORD secret is not set) — visible in plain text'
-        required: false
-        type: string
-        default: ''
 
 # 🔒 Permissions needed
 permissions:
@@ -62,7 +26,7 @@ env:
 jobs:
   call-security-scan:
     name: Run Security Scan
-    uses: Mohd2040/vulnerability-test-tools/.github/workflows/reusable-security.yml@devops
+    uses: Mohd2040/vulnerability-test-tools/.github/workflows/reusable-security.yml@sca-sast-devops
     with:
       runner_labels: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runner_labels || '["ubuntu-latest"]' }}
       project_type: 'auto'
